@@ -1,0 +1,15 @@
+node_modules/
+.DS_Store
+*.log
+.cdp-profile-*/
+.chrome-profile*/
+.pdf-ax-profile*/
+.piptmp*/
+artifacts/
+shot-*.png
+answers-*.png
+screenshots/*
+!screenshots/game-desktop.png
+!screenshots/checkers-desktop.png
+!screenshots/poker-desktop.png
+!screenshots/poker-gto.png

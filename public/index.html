@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="连珠 · LAN Board Games —— 打开浏览器就能玩的双人五子棋、中国跳棋与单挑德州扑克。同一局域网创建房间，把链接发给朋友即可对弈。"
+    />
+    <meta name="theme-color" content="#0e1311" />
+    <title>连珠 · 局域网棋桌</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-a"></div>
+      <div class="ambient-orb ambient-orb-b"></div>
+      <div class="ambient-grid"></div>
+    </div>
+
+    <header class="topbar">
+      <button class="brand" id="brandHome" type="button" aria-label="返回首页">
+        <span class="brand-mark" aria-hidden="true">
+          <i class="brand-dot brand-dot-1"></i>
+          <i class="brand-dot brand-dot-2"></i>
+          <i class="brand-dot brand-dot-3"></i>
+          <i class="brand-dot brand-dot-4"></i>
+          <i class="brand-dot brand-dot-5"></i>
+        </span>
+        <span class="brand-word">
+          <strong>连珠</strong>
+          <small>BOARD&nbsp;GAMES&nbsp;&nbsp;LAN</small>
+        </span>
+      </button>
+
+      <div class="topbar-tools">
+        <span class="server-pill" id="serverPill">
+          <i class="server-dot"></i>
+          <span id="serverPillText">局域网大厅</span>
+        </span>
+        <button
+          class="icon-button"
+          id="soundToggle"
+          type="button"
+          aria-label="切换音效"
+          aria-pressed="true"
+          title="音效"
+        >
+          <svg class="icon icon-sound-on" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9.5v5h3.2L12 18V6L7.2 9.5H4Z" />
+            <path d="M15.2 8.6a4.8 4.8 0 0 1 0 6.8" />
+            <path d="M17.8 6a8.3 8.3 0 0 1 0 12" />
+          </svg>
+          <svg class="icon icon-sound-off" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9.5v5h3.2L12 18V6L7.2 9.5H4Z" />
+            <path d="m16 9 5 5m0-5-5 5" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="app">
+      <!-- ============================== 首页 ============================== -->
+      <section class="screen home-screen" id="homeScreen">
+        <div class="hero">
+          <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            <span>双人 · 局域网 · 棋牌游戏</span>
+          </div>
+
+          <h1>
+            隔一张桌子，<br />
+            <em>下一盘棋。</em>
+          </h1>
+
+          <p class="hero-copy">
+            五子棋、中国跳棋或单挑德州扑克，创建一间房，把链接发给同一 Wi‑Fi 下的朋友。
+            不需要注册，不用下载，打开浏览器就能开局。
+          </p>
+
+          <div class="hero-art" id="heroArt" data-game="gomoku" aria-hidden="true">
+            <div class="hero-preview" id="gomokuPreview">
+              <div class="mini-board">
+                <span class="mini-stone black" style="left: 23%; top: 38%"></span>
+                <span class="mini-stone black" style="left: 38%; top: 45%"></span>
+                <span class="mini-stone black" style="left: 53%; top: 52%"></span>
+                <span class="mini-stone black" style="left: 68%; top: 59%"></span>
+                <span class="mini-stone black" style="left: 83%; top: 66%"></span>
+                <span class="mini-stone white" style="left: 38%; top: 24%"></span>
+                <span class="mini-stone white" style="left: 53%; top: 31%"></span>
+                <span class="mini-stone white" style="left: 68%; top: 38%"></span>
+                <span class="mini-stone white" style="left: 23%; top: 66%"></span>
+                <span class="mini-win-line"></span>
+              </div>
+              <div class="hero-tag">
+                <span class="hero-tag-stone"></span>
+                <div>
+                  <strong id="heroTagTitle">五子连珠</strong>
+                  <small id="heroTagSub">横 · 竖 · 斜</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-preview checkers-preview" id="checkersPreview" hidden>
+              <div class="mini-star" id="miniStar"></div>
+              <div class="hero-tag checkers-hero-tag">
+                <span class="hero-tag-stone checkers"></span>
+                <div>
+                  <strong>送子过河</strong>
+                  <small>走一步 · 连跳</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-preview poker-preview" id="pokerPreview" hidden>
+              <div class="mini-poker" aria-hidden="true">
+                <div class="mini-poker-card mini-poker-opponent"></div>
+                <div class="mini-poker-card mini-poker-opponent second"></div>
+                <div class="mini-poker-board">
+                  <i>♥</i><i>♣</i><i>♦</i><i>♠</i><i>♥</i>
+                </div>
+                <div class="mini-poker-pot"></div>
+                <div class="mini-poker-card mini-poker-hero"></div>
+                <div class="mini-poker-card mini-poker-hero second"></div>
+              </div>
+              <div class="hero-tag poker-hero-tag">
+                <span class="hero-tag-stone poker"></span>
+                <div>
+                  <strong>单挑底池</strong>
+                  <small>位置 · 赔率 · GTO</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ul class="feature-list">
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12a8 8 0 1 0 16 0 8 8 0 1 0-16 0" />
+                <path d="M4 12h16M12 4c2 2.4 3 5.1 3 8s-1 5.6-3 8c-2-2.4-3-5.1-3-8s1-5.6 3-8Z" />
+              </svg>
+              同一 Wi‑Fi 即可
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 5 6v5c0 4.3 2.9 8.2 7 10 4.1-1.8 7-5.7 7-10V6l-7-3Z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+              无需注册登录
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 4h8M9 4v5l-4.5 9A1.7 1.7 0 0 0 6 20.5h12a1.7 1.7 0 0 0 1.5-2.5L15 9V4" />
+                <path d="M7.5 15h9" />
+              </svg>
+              打开即玩
+            </li>
+          </ul>
+        </div>
+
+        <div class="entry-column">
+          <section class="entry-card" aria-label="开始对弈">
+            <div class="entry-card-top">
+              <span class="card-kicker">开始对弈</span>
+              <span class="live-badge"><i></i> LAN READY</span>
+            </div>
+
+            <div class="tabs" role="tablist" aria-label="对局方式">
+              <button
+                class="tab is-active"
+                id="createTab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="createPanel"
+                data-tab="create"
+              >
+                创建房间
+              </button>
+              <button
+                class="tab"
+                id="joinTab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="joinPanel"
+                data-tab="join"
+              >
+                加入房间
+              </button>
+              <span class="tab-indicator" id="tabIndicator"></span>
+            </div>
+
+            <form class="entry-panel" id="createPanel" data-panel="create" novalidate>
+              <p class="panel-copy">选择一种玩法。创建房间后，把邀请链接发给朋友。</p>
+
+              <div class="game-picker" role="radiogroup" aria-label="选择玩法">
+                <button
+                  class="game-choice is-active"
+                  type="button"
+                  role="radio"
+                  aria-checked="true"
+                  data-game="gomoku"
+                >
+                  <span class="game-choice-icon gomoku-icon" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i>
+                  </span>
+                  <span class="game-choice-copy">
+                    <strong>五子棋</strong>
+                    <small>15 × 15 · 五连获胜</small>
+                  </span>
+                  <span class="game-choice-check" aria-hidden="true">✓</span>
+                </button>
+                <button
+                  class="game-choice"
+                  type="button"
+                  role="radio"
+                  aria-checked="false"
+                  data-game="checkers"
+                >
+                  <span class="game-choice-icon checkers-icon" aria-hidden="true">
+                    <svg viewBox="0 0 40 40">
+                      <path d="M20 3 23.4 13.3 34 9.8 27.5 20 34 30.2 23.4 26.7 20 37 16.6 26.7 6 30.2 12.5 20 6 9.8 16.6 13.3Z" />
+                    </svg>
+                  </span>
+                  <span class="game-choice-copy">
+                    <strong>中国跳棋</strong>
+                    <small>六角星 · 送完 10 子</small>
+                  </span>
+                  <span class="game-choice-check" aria-hidden="true">✓</span>
+                </button>
+                <button
+                  class="game-choice"
+                  type="button"
+                  role="radio"
+                  aria-checked="false"
+                  data-game="poker"
+                >
+                  <span class="game-choice-icon poker-icon" aria-hidden="true">
+                    <span class="poker-icon-suit">♠</span>
+                    <span class="poker-icon-suit">♥</span>
+                  </span>
+                  <span class="game-choice-copy">
+                    <strong>德州扑克</strong>
+                    <small>单挑 · 无限注</small>
+                  </span>
+                  <span class="game-choice-check" aria-hidden="true">✓</span>
+                </button>
+              </div>
+
+              <div class="poker-stack-picker" id="pokerStackPicker" hidden>
+                <div class="stack-picker-head">
+                  <span>双方起始筹码</span>
+                  <span>盲注 0.5 / 1 BB</span>
+                </div>
+                <div class="stack-options" role="radiogroup" aria-label="起始筹码">
+                  <button type="button" class="stack-option" data-stack="20" role="radio" aria-checked="false">
+                    20 BB
+                  </button>
+                  <button type="button" class="stack-option" data-stack="50" role="radio" aria-checked="false">
+                    50 BB
+                  </button>
+                  <button type="button" class="stack-option is-active" data-stack="100" role="radio" aria-checked="true">
+                    100 BB
+                  </button>
+                  <button type="button" class="stack-option" data-stack="200" role="radio" aria-checked="false">
+                    200 BB
+                  </button>
+                </div>
+              </div>
+
+              <label class="field" for="nameInput">
+                <span class="field-label">你的昵称</span>
+                <span class="input-wrap">
+                  <input
+                    id="nameInput"
+                    type="text"
+                    name="name"
+                    maxlength="12"
+                    autocomplete="nickname"
+                    placeholder="例如：小林"
+                  />
+                  <span class="input-count" id="nameCount">0/12</span>
+                </span>
+              </label>
+              <button class="btn btn-primary btn-large" id="createButton" type="submit">
+                <span>创建房间</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+              <p class="fine-print">
+                <span class="chip-dot black"></span>
+                <span id="createFinePrint">黑方先行 · 标准 15 × 15 棋盘</span>
+              </p>
+            </form>
+
+            <form class="entry-panel" id="joinPanel" data-panel="join" hidden novalidate>
+              <div class="invite-callout" id="inviteCallout" hidden>
+                <span class="callout-icon">↗</span>
+                <p>你收到一个房间邀请<strong id="inviteCalloutCode"></strong></p>
+              </div>
+              <label class="field" for="joinNameInput">
+                <span class="field-label">你的昵称</span>
+                <span class="input-wrap">
+                  <input
+                    id="joinNameInput"
+                    type="text"
+                    name="name"
+                    maxlength="12"
+                    autocomplete="nickname"
+                    placeholder="例如：阿青"
+                  />
+                </span>
+              </label>
+              <label class="field" for="roomInput">
+                <span class="field-label">4 位房间号</span>
+                <span class="input-wrap code-wrap">
+                  <input
+                    id="roomInput"
+                    class="code-input"
+                    type="text"
+                    name="room"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="4"
+                    pattern="[0-9]*"
+                    placeholder="0000"
+                    aria-describedby="roomHint"
+                  />
+                </span>
+              </label>
+              <button class="btn btn-primary btn-large" id="joinButton" type="submit">
+                <span>加入对局</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+              <p class="fine-print" id="roomHint">
+                需要先打开房主分享的地址，再输入房间号
+              </p>
+            </form>
+
+            <div class="entry-divider"><span>同一局域网 · 无需注册</span></div>
+
+            <div class="server-line">
+              <span class="server-state" id="serverState"><i></i><span>正在获取局域网地址…</span></span>
+              <button type="button" class="quiet-link" id="refreshInfoButton">刷新</button>
+            </div>
+          </section>
+
+          <div class="howto" aria-label="联机步骤">
+            <div class="howto-item">
+              <b>01</b>
+              <span>房主创建房间</span>
+            </div>
+            <div class="howto-item">
+              <b>02</b>
+              <span>朋友打开邀请链接</span>
+            </div>
+            <div class="howto-item">
+              <b>03</b>
+              <span>轮流行动，达成目标</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== 对局页 ============================== -->
+      <section class="screen game-screen" id="gameScreen" hidden>
+        <div class="game-layout">
+          <section class="board-column">
+            <div class="game-topbar">
+              <button class="room-code-pill" id="copyCodeButton" type="button" title="复制房间号">
+                <span>房间</span>
+                <strong id="roomCodeLabel">----</strong>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="8" y="8" width="11" height="11" rx="2" />
+                  <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+                </svg>
+              </button>
+              <div class="round-label" id="roundLabel">第 1 局 · 黑先</div>
+              <div class="connection-label" id="connectionLabel"><i></i><span id="connectionText">已连接</span></div>
+            </div>
+
+            <div class="board-stage">
+              <div class="board-shell gomoku-shell" id="boardShell">
+                <div
+                  class="board"
+                  id="board"
+                  role="group"
+                  aria-label="15 乘 15 五子棋棋盘"
+                >
+                  <svg
+                    class="board-lines"
+                    id="boardLines"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  ></svg>
+                  <div class="stones" id="stonesLayer" aria-hidden="true"></div>
+                  <div class="cells" id="cellsLayer">
+                    <div class="win-stroke" id="winLine" aria-hidden="true"></div>
+                  </div>
+                  <div class="board-vignette" aria-hidden="true"></div>
+                  <div class="board-lock" id="boardLock" hidden>
+                    <span class="lock-stone"></span>
+                    <strong id="boardLockTitle">等待棋友入座</strong>
+                    <p id="boardLockText">把邀请链接发给朋友，对局将在对方加入后开始</p>
+                  </div>
+                  <div class="result-ribbon" id="resultRibbon" hidden>
+                    <span id="resultRibbonText"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="board-shell checkers-shell" id="checkersShell" hidden>
+                <div
+                  class="checkers-board"
+                  id="checkersBoard"
+                  role="group"
+                  aria-label="中国跳棋六角星棋盘，121 个棋位"
+                >
+                  <svg
+                    class="checkers-svg"
+                    id="checkersSvg"
+                    viewBox="0 0 1000 1000"
+                    preserveAspectRatio="xMidYMid meet"
+                    aria-hidden="true"
+                  ></svg>
+                  <div class="board-lock checkers-lock" id="checkersLock" hidden>
+                    <span class="lock-stone checkers-lock-stone"></span>
+                    <strong id="checkersLockTitle">等待棋友入座</strong>
+                    <p id="checkersLockText">把邀请链接发给朋友，对局将在对方加入后开始</p>
+                  </div>
+                  <div class="result-ribbon" id="checkersRibbon" hidden>
+                    <span id="checkersRibbonText"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="board-shell poker-shell" id="pokerShell" hidden>
+                <div class="poker-table" id="pokerTable">
+                  <div class="poker-felt">
+                    <div class="poker-table-mark" aria-hidden="true"></div>
+
+                    <div class="poker-seat poker-opponent-seat" id="pokerOpponentSeat">
+                      <div class="poker-seat-top">
+                        <span class="poker-position" id="pokerOpponentPosition">BB</span>
+                        <strong id="pokerOpponentName">对手</strong>
+                        <span class="poker-seat-stack" id="pokerOpponentStack">100 BB</span>
+                      </div>
+                      <div class="poker-cards" id="pokerOpponentCards"></div>
+                      <div class="poker-bet" id="pokerOpponentBet" hidden></div>
+                    </div>
+
+                    <div class="poker-center">
+                      <div class="poker-pot" id="pokerPot">底池 0 BB</div>
+                      <div class="poker-community" id="pokerCommunity"></div>
+                      <div class="poker-stage" id="pokerStageLabel">等待开始</div>
+                      <div class="poker-last-action" id="pokerLastAction"></div>
+                    </div>
+
+                    <div class="poker-seat poker-hero-seat" id="pokerHeroSeat">
+                      <div class="poker-seat-top">
+                        <span class="poker-position" id="pokerHeroPosition">BTN · SB</span>
+                        <strong id="pokerHeroName">你</strong>
+                        <span class="poker-seat-stack" id="pokerHeroStack">100 BB</span>
+                      </div>
+                      <div class="poker-cards" id="pokerHeroCards"></div>
+                      <div class="poker-bet" id="pokerHeroBet" hidden></div>
+                    </div>
+
+                    <div class="poker-dealer" id="pokerDealerButton" hidden>D</div>
+
+                    <div class="board-lock poker-lock" id="pokerLock" hidden>
+                      <span class="lock-stone poker-lock-stone"></span>
+                      <strong id="pokerLockTitle">等待对手入座</strong>
+                      <p id="pokerLockText">对手加入后自动发牌，盲注 0.5 / 1 BB</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="poker-result-panel" id="pokerResultPanel" hidden>
+                  <p class="poker-result-kicker" id="pokerResultKicker">本手结束</p>
+                  <h3 id="pokerResultTitle">你赢得底池</h3>
+                  <p id="pokerResultDetail"></p>
+                  <div class="poker-result-hands" id="pokerResultHands"></div>
+                  <div class="poker-result-countdown" id="pokerResultCountdown"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="board-foot">
+              <span class="foot-item"><i class="mini-stone-icon black"></i> <span id="firstMoveLabel">黑方先行</span></span>
+              <span class="foot-item" id="boardSizeLabel">15 × 15</span>
+              <span class="foot-item" id="lastMoveLabel">上一手 —</span>
+              <span class="foot-spacer"></span>
+              <button class="quiet-link" id="rulesButton" type="button">对局规则</button>
+            </div>
+          </section>
+
+          <aside class="side-panel" id="sidePanel">
+            <div class="status-card" id="statusCard">
+              <div class="turn-stone black" id="turnStone" aria-hidden="true"></div>
+              <div class="status-copy" aria-live="polite" aria-atomic="true">
+                <p class="status-kicker" id="statusKicker">等待对手</p>
+                <h2 id="statusTitle">房间已创建</h2>
+                <p id="statusSub">把邀请链接发给朋友，等待入座</p>
+              </div>
+              <span class="waiting-dots" id="waitingDots" aria-hidden="true"
+                ><i></i><i></i><i></i
+              ></span>
+            </div>
+
+            <div class="players" aria-label="对局双方">
+              <article class="player-card" id="blackPlayerCard" data-color="black">
+                <span class="player-stone black" aria-hidden="true"></span>
+                <div class="player-info">
+                  <strong id="blackName">等待加入</strong>
+                  <span id="blackSub">黑方 · 先手</span>
+                </div>
+                <span class="you-badge" id="blackYou" hidden>你</span>
+                <span class="player-state" id="blackState">空位</span>
+              </article>
+
+              <div class="versus"><span>VS</span></div>
+
+              <article class="player-card" id="whitePlayerCard" data-color="white">
+                <span class="player-stone white" aria-hidden="true"></span>
+                <div class="player-info">
+                  <strong id="whiteName">等待加入</strong>
+                  <span id="whiteSub">白方 · 后手</span>
+                </div>
+                <span class="you-badge" id="whiteYou" hidden>你</span>
+                <span class="player-state" id="whiteState">空位</span>
+              </article>
+            </div>
+
+            <div class="match-meta">
+              <div class="meta-item">
+                <span id="moveCountCaption">手数</span>
+                <strong id="moveCountLabel">0</strong>
+              </div>
+              <div class="meta-item">
+                <span id="roundCaption">局数</span>
+                <strong id="roundCountLabel">1</strong>
+              </div>
+              <div class="meta-item">
+                <span id="phaseCaption">状态</span>
+                <strong id="phaseLabel">等待中</strong>
+              </div>
+            </div>
+
+            <div class="gto-panel" id="gtoPanel" hidden>
+              <div class="gto-head">
+                <div class="gto-title">
+                  <span class="gto-badge">GTO</span>
+                  <span>推荐行动</span>
+                </div>
+                <button
+                  class="gto-toggle"
+                  id="gtoToggle"
+                  type="button"
+                  aria-pressed="false"
+                  title="开启 GTO 建议"
+                >
+                  <span class="gto-switch"><i></i></span>
+                  <span id="gtoToggleLabel">关</span>
+                </button>
+              </div>
+              <div class="gto-body" id="gtoBody" hidden>
+                <div class="gto-advice">
+                  <span>建议</span>
+                  <strong id="gtoAction">—</strong>
+                </div>
+                <p class="gto-reason" id="gtoReason">轮到你行动时显示建议。</p>
+                <div class="gto-stats">
+                  <span><i id="gtoEquityLabel">胜率</i><b id="gtoEquity">—</b></span>
+                  <span><i>底池赔率</i><b id="gtoOdds">—</b></span>
+                  <span><i>推荐频率</i><b id="gtoFrequency">—</b></span>
+                </div>
+                <p class="gto-note">本地 GTO 近似 · 仅供娱乐</p>
+              </div>
+            </div>
+
+            <div class="poker-controls" id="pokerControls" hidden>
+              <div class="poker-control-head">
+                <span>你的行动</span>
+                <span id="pokerCallInfo">等待发牌</span>
+              </div>
+              <div class="poker-action-row">
+                <button class="poker-btn poker-btn-fold" id="pokerFoldButton" type="button">弃牌</button>
+                <button class="poker-btn poker-btn-check" id="pokerCheckButton" type="button">过牌</button>
+                <button class="poker-btn poker-btn-call" id="pokerCallButton" type="button">
+                  跟注 <span id="pokerCallAmount">0 BB</span>
+                </button>
+              </div>
+              <button class="poker-btn poker-btn-raise" id="pokerRaiseToggle" type="button">
+                加注 / 下注
+              </button>
+              <div class="poker-raise-box" id="pokerRaiseBox" hidden>
+                <div class="poker-raise-head">
+                  <span>加注到</span>
+                  <strong id="pokerRaiseAmount">0 BB</strong>
+                </div>
+                <input
+                  class="poker-raise-slider"
+                  id="pokerRaiseSlider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="0.5"
+                  value="0"
+                  aria-label="加注金额"
+                />
+                <div class="poker-raise-presets">
+                  <button type="button" data-size="0.5">½ 池</button>
+                  <button type="button" data-size="0.75">¾ 池</button>
+                  <button type="button" data-size="1">1 池</button>
+                  <button type="button" data-size="allin">All-in</button>
+                </div>
+                <button class="btn btn-primary" id="pokerRaiseConfirm" type="button">
+                  加注到 0 BB
+                </button>
+              </div>
+              <p class="poker-action-hint" id="pokerActionHint">等待轮到你行动</p>
+            </div>
+
+            <div class="invite-panel" id="invitePanel">
+              <div class="invite-head">
+                <span>邀请好友</span>
+                <button class="quiet-link" id="shareButton" type="button">系统分享</button>
+              </div>
+              <div class="link-box">
+                <input id="inviteLinkInput" type="text" readonly aria-label="邀请链接" />
+                <button class="copy-button" id="copyLinkButton" type="button" aria-label="复制邀请链接">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="8" y="8" width="11" height="11" rx="2" />
+                    <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+                  </svg>
+                </button>
+              </div>
+              <p class="invite-hint" id="inviteHint">同一 Wi‑Fi 下打开链接即可加入</p>
+            </div>
+
+            <div class="action-stack">
+              <button class="btn btn-primary" id="primaryAction" type="button">复制邀请链接</button>
+              <button class="btn btn-ghost" id="secondaryAction" type="button">关闭房间</button>
+            </div>
+
+            <div class="history-panel" id="historyPanel" hidden>
+              <div class="history-head">
+                <span id="historyTitle">落子记录</span>
+                <span id="historyCount">0 手</span>
+              </div>
+              <ol class="history-list" id="historyList"></ol>
+              <p class="history-empty" id="historyEmpty">第一手，等你落下</p>
+            </div>
+
+            <div class="game-note" id="gameNote" aria-hidden="true">
+              <span class="game-note-mark" id="gameNoteMark">五</span>
+              <div>
+                <strong id="gameNoteTitle">落子无悔</strong>
+                <small id="gameNoteText">横 · 竖 · 斜，先连五子者胜</small>
+              </div>
+            </div>
+
+            <div class="side-foot">
+              <button class="subtle-link" id="leaveLink" type="button">离开房间</button>
+              <button class="subtle-link" id="gameSoundToggle" type="button" aria-pressed="true">
+                音效：开
+              </button>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>连珠 · 与身边的人下一盘慢棋</span>
+      <span class="footer-dot">·</span>
+      <span id="footerRuleLabel">15 × 15 · 自由规则</span>
+      <span class="footer-spacer"></span>
+      <span id="footerAddress">LAN BOARD GAMES</span>
+    </footer>
+
+    <div class="chain-bar" id="chainBar" hidden>
+      <span class="chain-dot" aria-hidden="true"></span>
+      <span>连跳中 · 已跳 <strong id="chainCount">0</strong> 步</span>
+      <button class="chain-end-button" id="endChainButton" type="button">结束回合</button>
+    </div>
+
+    <div class="toast-host" id="toastHost" role="status" aria-live="polite"></div>
+
+    <div class="reconnect-overlay" id="reconnectOverlay" hidden>
+      <div class="reconnect-card">
+        <div class="spinner" aria-hidden="true"></div>
+        <h3>连接中断</h3>
+        <p id="reconnectText">正在尝试重新连接房间…</p>
+        <button class="btn btn-ghost" id="reconnectHomeButton" type="button">返回首页</button>
+      </div>
+    </div>
+
+    <dialog class="dialog" id="confirmDialog">
+      <form method="dialog">
+        <div class="dialog-mark" id="dialogMark" aria-hidden="true">!</div>
+        <h3 id="dialogTitle">确认操作</h3>
+        <p id="dialogBody">确定要继续吗？</p>
+        <div class="dialog-actions">
+          <button class="btn btn-ghost" value="cancel" type="submit">取消</button>
+          <button class="btn btn-primary" id="dialogConfirmButton" value="confirm" type="submit">
+            确认
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog rules-dialog" id="rulesDialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" type="submit" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
+        </button>
+        <span class="dialog-kicker" id="rulesKicker">GOMOKU RULES</span>
+        <h3 id="rulesTitle">五子棋规则</h3>
+        <div class="rules-list" id="gomokuRules">
+          <p><b>01</b><span>黑方先行，双方轮流在交叉点落子。</span></p>
+          <p><b>02</b><span>横、竖、斜任意方向先连成五子者获胜，长连也算胜。</span></p>
+          <p><b>03</b><span>棋盘落满仍未分出胜负，判为和棋。</span></p>
+          <p><b>04</b><span>点击「认输」即判负；对局结束后双方可申请再来一局，黑白互换。</span></p>
+        </div>
+        <div class="rules-list" id="checkersRules" hidden>
+          <p><b>01</b><span>黑方先行，双方各执 10 枚棋子，从自己一端的三角形出发。</span></p>
+          <p><b>02</b><span>每回合可走到相邻空位一步，或跳过相邻的一枚棋子落到空位。</span></p>
+          <p><b>03</b><span>跳跃可以连续进行，也可以随时选择「结束回合」；连跳途中不能改为单步。</span></p>
+          <p><b>04</b><span>率先把全部 10 枚棋子送进对面三角形阵营的一方获胜。</span></p>
+        </div>
+        <div class="rules-list" id="pokerRules" hidden>
+          <p><b>01</b><span>单挑无限注德州扑克：双方起始筹码相同，盲注固定为 0.5 / 1 BB，按钮位每手轮换。</span></p>
+          <p><b>02</b><span>每人两张底牌，依次发出翻牌 3 张、转牌 1 张、河牌 1 张，共 5 张公共牌。</span></p>
+          <p><b>03</b><span>每轮可过牌、跟注、下注、加注、弃牌或 All-in；下注最低 1 BB，加注最低为一个完整加注额。</span></p>
+          <p><b>04</b><span>用两张底牌与五张公共牌组成最佳 5 张牌比大小；牌力相同则平分底池。</span></p>
+          <p><b>05</b><span>一手结束后自动开始下一手；一方筹码清零则本局结束。右侧可开启 GTO 推荐参考。</span></p>
+        </div>
+        <button class="btn btn-primary" value="close" type="submit">知道了</button>
+      </form>
+    </dialog>
+
+    <script src="/poker-core.js" defer></script>
+    <script src="/checkers-core.js" defer></script>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
